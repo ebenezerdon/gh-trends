@@ -13,12 +13,19 @@ function App() {
   const url = `${baseUrl}?q=created:>${formattedDate}&sort=stars&order=desc`
   const { data, isLoading, error } = useFetch(url)
 
-  const favourites = useLiveQuery(() => db.favRepos?.toArray())
+  const favRepos = useLiveQuery(() => db.favRepos?.toArray())
+  const repoItems = favRepos?.map(item => item.repo)
 
   return (
     <div className="App">
-      <h1>{formattedDate}</h1>
-      <Cards data={data}/>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error Fetching Data...</p>}
+
+      <h1>Favourites</h1>
+      <Cards data={repoItems} />
+
+      <h1>Trending: {formattedDate}</h1>
+      <Cards data={data?.items} />
     </div>
   );
 }

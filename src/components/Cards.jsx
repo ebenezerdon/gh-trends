@@ -3,7 +3,7 @@ import { addFav, removeFav } from '../db'
 const Cards = ({ data }) => {
   return (
     <div>
-      {data?.items?.map(repo => (
+      {data?.map(repo => (
         <div key={repo.id}>
           <img src={repo.owner?.avatar_url} alt="" />
           <h3>{repo.name}</h3>
