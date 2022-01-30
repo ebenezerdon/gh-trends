@@ -1,0 +1,37 @@
+.cards {
+    width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.item {
+    background: #fff;
+    box-shadow: 1px 5px 15px #CCC;
+    width: 10rem;
+    height: auto;
+    border-radius: 3px;
+    padding: 2rem;
+    margin: 1rem;
+    overflow: hidden;
+    position: relative;
+    flex: auto;
+}
+
+.item img {
+    max-width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.item button {
+    border: 1px solid #262734;
+    border-radius: 3px;
+    color: #fff;
+    padding: 1rem 3rem;
+    margin: 1rem 0 0 0;
+    background: #262734;
+    cursor: pointer;
+    transition: background ease-in 0.25s;
+}
+
