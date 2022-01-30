@@ -1,37 +1,56 @@
 .cards {
-    width: 100%;
-    justify-content: flex-start;
-    display: flex;
-    flex-flow: row wrap;
+    border: 2px solid #cfd7dd;
+    padding: 1rem;
 }
 
 .item {
-    background: #fff;
-    box-shadow: 1px 5px 15px #CCC;
-    width: 10rem;
-    height: auto;
-    border-radius: 3px;
-    padding: 2rem;
-    margin: 1rem;
-    overflow: hidden;
-    position: relative;
-    flex: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #d8dee3;
 }
 
-.item img {
-    max-width: 100%;
-    height: auto;
-    text-align: center;
+.title a {
+    color: #0968da;
+    text-decoration: none;
+    font-size: 1.4rem;
 }
 
-.item button {
-    border: 1px solid #262734;
-    border-radius: 3px;
+.title a:hover {
+    text-decoration: underline;
+}
+
+.desc {
+    line-height: 1.1rem;
+}
+
+.details span {
+    background: #353535;
     color: #fff;
-    padding: 1rem 3rem;
-    margin: 1rem 0 0 0;
-    background: #262734;
-    cursor: pointer;
-    transition: background ease-in 0.25s;
+    margin-right: 1rem;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    font-size: 0.7rem;
 }
 
+.details .license {
+    background: #0968da;
+    color: #fff;
+}
+
+.favButton {
+    margin-top: 1rem;
+}
+
+.favButton button {
+    width: 7rem;
+}
+
+@media screen and (max-width: 770px) {
+    .details span {
+        display: block;
+        width: fit-content;
+        margin-bottom: 0.3rem;
+    }
+}

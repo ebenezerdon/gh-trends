@@ -1,8 +1,50 @@
-body {
-  background: #f3f4f6;
+.App {
+  margin: 5rem 10rem;
 }
 
-.App {
+nav {
+  background: #f5f8fa;
+  border: 2px solid #cfd7dd;
+  border-bottom: none;
+  padding: 1rem;
+}
+
+nav .btn {
+  font-size: 1rem;
+}
+
+.btn {
+  background: #fff;
+  padding: 5px 10px;
+  text-decoration: none;
   text-align: center;
-  margin: 5rem;
+  height: 2.5rem;
+  transition: background 0.5s ease, transform 0.5s ease;
+  border: 1px solid #e3e3e3;
+  cursor: pointer;
+}
+
+.btn.blue {
+  background: #0968da;
+  color: #fff;
+}
+
+.btn.green {
+  background: #238636;
+  color: #fff;
+}
+
+.btn.red {
+  background: #950000;
+  color: #fff;
+}
+
+.btn.round {
+  border-radius: 2rem;
+}
+
+@media screen and (max-width: 770px) {
+  .App {
+    margin: 0;
+  }
 }
