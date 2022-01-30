@@ -6,7 +6,7 @@ import './App.css'
 import { useState } from 'react'
 
 function App() {
-  const [onTrendsView, setOnTrendsView] = useState(true)
+  const [onFavView, setOnFavView] = useState(false)
 
   const date = new Date()
   date.setDate(date.getDate() - 7)
@@ -24,14 +24,18 @@ function App() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error Fetching Data...</p>}
 
-      <button onClick={() => setOnTrendsView(true)}>
+      <button onClick={() => setOnFavView(false)}>
         Trending ({data?.items?.length})
       </button>
-      <button onClick={() => setOnTrendsView(false)}>
-        Favourites ({repoItems.length})
+      <button onClick={() => setOnFavView(true)}>
+        Favourites ({repoItems?.length})
       </button>
 
-      <Cards data={onTrendsView ? data?.items : repoItems} />
+      <Cards data={onFavView ? repoItems : data?.items } />
+
+      {onFavView && repoItems?.length < 1 && (
+        <h1>You have not added any repos to your favourites yet</h1>
+      )}
     </div>
   )
 }
