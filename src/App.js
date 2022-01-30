@@ -1,10 +1,13 @@
 import useFetch from 'react-fetch-hook'
-import { db } from './db'
-import './App.css'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from './db'
 import Cards from './components/Cards'
+import './App.css'
+import { useState } from 'react'
 
 function App() {
+  const [onTrendsView, setOnTrendsView] = useState(true)
+
   const date = new Date()
   date.setDate(date.getDate() - 7)
   const formattedDate = date.toISOString().split('T')[0]
@@ -21,13 +24,16 @@ function App() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error Fetching Data...</p>}
 
-      <h1>Favourites</h1>
-      <Cards data={repoItems} />
+      <button onClick={() => setOnTrendsView(true)}>
+        Trending ({data?.items?.length})
+      </button>
+      <button onClick={() => setOnTrendsView(false)}>
+        Favourites ({repoItems.length})
+      </button>
 
-      <h1>Trending: {formattedDate}</h1>
-      <Cards data={data?.items} />
+      <Cards data={onTrendsView ? data?.items : repoItems} />
     </div>
-  );
+  )
 }
 
 export default App
