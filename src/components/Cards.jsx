@@ -2,20 +2,33 @@ import { addFav, removeFav } from '../db'
 import './cards.css'
 
 const Cards = ({ data, isRepoInFav }) => {
+  console.log('====>', data)
   return (
     <div className="cards">
       {data?.map(repo => (
         <div className="item" key={repo.id}>
-          <img className="img" src={repo.owner?.avatar_url} alt="" />
-          <h3>{repo.name}</h3>
-          <p>stars: {repo.stargazers_count}</p>
+          <div>
+            <p className="title">
+              <a href={repo.html_url} target="_blank" rel="noreferrer">
+                {repo.owner?.login} / <strong>{repo.name}</strong>
+              </a>
+            </p>
 
-          {isRepoInFav(repo.id)
-            ? <button onClick={() => removeFav(repo)}>Remove from Favorites</button>
-            : <button onClick={() => addFav(repo)}>Add to Favorites</button>
-          }
+            <p className="desc">{repo.description}</p>
 
-          <a href={repo.html_url} target="_blank" rel="noreferrer">Open in GitHub</a>
+            <div className="details">
+              <span>stars: {repo.stargazers_count}</span>
+              <span className="license">{repo.license?.name || 'Licence Unavailable'}</span>
+            </div>
+          </div>
+
+          <div className="favButton">
+            {isRepoInFav(repo.id)
+              ? <button className="btn red round" onClick={() => removeFav(repo)}>Unsave</button>
+              : <button className="btn green round" onClick={() => addFav(repo)}>Save</button>
+            }
+          </div>
+
         </div>
       ))}
     </div>

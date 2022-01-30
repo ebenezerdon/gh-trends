@@ -28,12 +28,14 @@ function App() {
       {isLoading && <p>Loading...</p>}
       {error && <p>Error Fetching Data...</p>}
 
-      <button onClick={() => setOnFavView(false)}>
-        Trending ({data?.items?.length})
-      </button>
-      <button onClick={() => setOnFavView(true)}>
-        Favourites ({repoItems?.length})
-      </button>
+      <nav>
+        <button className={`btn ${!onFavView && 'blue'}`} onClick={() => setOnFavView(false)}>
+          Trending ~ {data?.items?.length}
+        </button>
+        <button className={`btn ${onFavView && 'blue'}`} onClick={() => setOnFavView(true)}>
+          Favourites ~ {repoItems?.length}
+        </button>
+      </nav>
 
       <Cards
         data={onFavView ? repoItems : data?.items }
