@@ -17,8 +17,8 @@ const Cards = ({ data, isRepoInFav }) => {
             <p className="desc">{repo.description}</p>
 
             <div className="details">
-              <span>stars: {repo.stargazers_count}</span>
-              <span className="license">{repo.license?.name || 'Licence Unavailable'}</span>
+              <span>&#11088; stars: {repo.stargazers_count}</span>
+              <span className="license">&#128466; {repo.license?.name || 'Licence Unavailable'}</span>
             </div>
           </div>
 
