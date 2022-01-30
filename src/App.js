@@ -19,6 +19,10 @@ function App() {
   const favRepos = useLiveQuery(() => db.favRepos?.toArray())
   const repoItems = favRepos?.map(item => item.repo)
 
+  const isRepoInFav = repoId => {
+    return repoItems?.filter(item => item.id === repoId).length
+  }
+
   return (
     <div className="App">
       {isLoading && <p>Loading...</p>}
@@ -31,7 +35,10 @@ function App() {
         Favourites ({repoItems?.length})
       </button>
 
-      <Cards data={onFavView ? repoItems : data?.items } />
+      <Cards
+        data={onFavView ? repoItems : data?.items }
+        isRepoInFav={isRepoInFav}
+      />
 
       {onFavView && repoItems?.length < 1 && (
         <h1>You have not added any repos to your favourites yet</h1>
