@@ -2,7 +2,7 @@
 
 Most starred repositories in the last 7 days
 
-Live app url: [ghtrends.netlify.app](ghtrends.netlify.app)
+Live app url: [ghtrends.netlify.app](https://ghtrends.netlify.app)
 
 
 ## Available Scripts
