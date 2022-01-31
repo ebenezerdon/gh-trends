@@ -13,7 +13,7 @@ function App() {
   const formattedDate = date.toISOString().split('T')[0]
 
   const baseUrl = 'https://api.github.com/search/repositories'
-  const url = `${baseUrl}?q=created:>${formattedDate}&sort=stars&order=desc`
+  const url = `${baseUrl}?q=created:>${formattedDate}&sort=stars&order=desc&per_page=30`
   const { data, isLoading, error } = useFetch(url)
 
   const favRepos = useLiveQuery(() => db.favRepos?.toArray())
@@ -27,6 +27,8 @@ function App() {
     <div className="App">
       {isLoading && <p>Loading...</p>}
       {error && <p>Error Fetching Data...</p>}
+
+      <h1>Most starred repos since {formattedDate}</h1>
 
       <nav>
         <button className={`btn ${!onFavView && 'blue'}`} onClick={() => setOnFavView(false)}>
@@ -43,7 +45,7 @@ function App() {
       />
 
       {onFavView && repoItems?.length < 1 && (
-        <h1>You have not added any repos to your favourites yet</h1>
+        <h1>You have not saved any repos yet</h1>
       )}
     </div>
   )
