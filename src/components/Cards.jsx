@@ -1,12 +1,11 @@
 import { addFav, removeFav } from '../db'
 import './cards.css'
 
-const Cards = ({ data, isRepoInFav }) => {
-  console.log('====>', data)
+const Cards = ({ data, isRepoInFav, repoItems }) => {
   return (
     <div className="cards">
       {data?.map(repo => (
-        <div className="item" key={repo.id}>
+        <div className="item" key={repo.id} id={'id' + repo.id}>
           <div>
             <p className="title">
               <a href={repo.html_url} target="_blank" rel="noreferrer">
