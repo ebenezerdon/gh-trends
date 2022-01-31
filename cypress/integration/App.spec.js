@@ -15,12 +15,11 @@ describe('Gh Trends', () => {
     saveButton.click()
     saveButton.should('have.text', 'Unsave')
 
-    // save item
     cy.get('button').contains('Favourites').click()
     cy.get('.item').should('have.length', 1)
 
     // unsave item
-    repo.find('button').click()
+    repo.find('button').contains('Unsave').click()
     cy.get('.App').contains('You have not saved any repos yet')
   })
 })
