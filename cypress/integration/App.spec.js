@@ -1,4 +1,4 @@
-describe('example to-do app', () => {
+describe('Gh Trends', () => {
   beforeEach(() => {
     cy.visit('http://localhost:3000')
   })
