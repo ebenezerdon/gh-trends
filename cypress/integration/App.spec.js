@@ -15,7 +15,7 @@ describe('Gh Trends', () => {
     saveButton.click()
     saveButton.should('have.text', 'Unsave')
 
-    // click favourite button
+    // save item
     cy.get('button').contains('Favourites').click()
     cy.get('.item').should('have.length', 1)
 
