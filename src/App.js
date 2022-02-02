@@ -7,13 +7,15 @@ import { useState } from 'react'
 
 function App() {
   const [onFavView, setOnFavView] = useState(false)
+  const [languageInput, setLanguageInput] = useState('')
+  const [languageFilter, setLanguageFilter] = useState('')
 
   const date = new Date()
   date.setDate(date.getDate() - 7)
   const formattedDate = date.toISOString().split('T')[0]
 
   const baseUrl = 'https://api.github.com/search/repositories'
-  const url = `${baseUrl}?q=created:>${formattedDate}&sort=stars&order=desc&per_page=30`
+  const url = `${baseUrl}?q=created:>${formattedDate}%20language:${languageFilter}&sort=stars&order=desc&per_page=30`
   const { data, isLoading, error } = useFetch(url)
 
   const favRepos = useLiveQuery(() => db.favRepos?.toArray())
@@ -37,6 +39,19 @@ function App() {
         <button className={`btn ${onFavView && 'blue'}`} onClick={() => setOnFavView(true)}>
           Favourites ~ {repoItems?.length}
         </button>
+
+        <form onSubmit={e => {
+          e.preventDefault()
+          setLanguageFilter(languageInput)
+        }}>
+          <input
+            type="text"
+            placeholder="type language to filter..."
+            value={languageInput}
+            onChange={event => setLanguageInput(event.target.value)}
+          />
+          <button type="submit">Filter</button>
+        </form>
       </nav>
 
       <Cards
