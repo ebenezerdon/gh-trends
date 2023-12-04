@@ -1,10 +1,10 @@
 import { addFav, removeFav } from '../db'
 import './cards.css'
 
-const Cards = ({ data, isRepoInFav, repoItems }) => {
+const Cards = ({ data, isRepoInFav }) => {
   return (
     <div className="cards">
-      {data?.map(repo => (
+      {data?.map((repo) => (
         <div className="item" key={repo.id} id={'id' + repo.id}>
           <div>
             <p className="title">
@@ -22,12 +22,16 @@ const Cards = ({ data, isRepoInFav, repoItems }) => {
           </div>
 
           <div className="favButton">
-            {isRepoInFav(repo.id)
-              ? <button className="btn red round" onClick={() => removeFav(repo)}>Unsave</button>
-              : <button className="btn green round" onClick={() => addFav(repo)}>Save</button>
-            }
+            {isRepoInFav(repo.id) ? (
+              <button className="btn red round" onClick={() => removeFav(repo)}>
+                Unsave
+              </button>
+            ) : (
+              <button className="btn green round" onClick={() => addFav(repo)}>
+                Save
+              </button>
+            )}
           </div>
-
         </div>
       ))}
     </div>
