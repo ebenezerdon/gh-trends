@@ -16,11 +16,12 @@ function App() {
   const url = `${baseUrl}?q=created:>${formattedDate}&sort=stars&order=desc&per_page=30`
   const { data, isLoading, error } = useFetch(url)
 
+  // @ts-ignore
   const favRepos = useLiveQuery(() => db.favRepos?.toArray())
-  const repoItems = favRepos?.map(item => item.repo)
+  const repoItems = favRepos?.map((item) => item.repo)
 
-  const isRepoInFav = repoId => {
-    return repoItems?.filter(item => item.id === repoId).length
+  const isRepoInFav = (repoId) => {
+    return repoItems?.filter((item) => item.id === repoId).length
   }
 
   return (
@@ -35,18 +36,13 @@ function App() {
           Trending ~ {data?.items?.length}
         </button>
         <button className={`btn ${onFavView && 'blue'}`} onClick={() => setOnFavView(true)}>
-          Favourites ~ {repoItems?.length}
+          Favorites ~ {repoItems?.length}
         </button>
       </nav>
 
-      <Cards
-        data={onFavView ? repoItems : data?.items }
-        isRepoInFav={isRepoInFav}
-      />
+      <Cards data={onFavView ? repoItems : data?.items} isRepoInFav={isRepoInFav} />
 
-      {onFavView && repoItems?.length < 1 && (
-        <h1>You have not saved any repos yet</h1>
-      )}
+      {onFavView && repoItems?.length < 1 && <h1>You have not saved any repos yet</h1>}
     </div>
   )
 }
