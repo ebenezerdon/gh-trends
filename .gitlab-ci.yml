@@ -2,7 +2,8 @@ stages:
   - build
   - deploy
 
-build:
+build-job:
+  stage: build
   image: docker:latest
   services:
     - docker:dind
@@ -11,7 +12,8 @@ build:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
-deploy:
+deploy-job:
+  stage: deploy
   image: google/cloud-sdk:latest
   script:
     - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
