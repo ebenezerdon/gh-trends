@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: gh-trends-container
-          image: gcr.io/gh-trends/gh-trends:v2
+          image: gcr.io/gh-trends/gh-trends:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           resources:
