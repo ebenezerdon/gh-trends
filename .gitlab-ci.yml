@@ -23,4 +23,4 @@ deploy-job:
     - gcloud container clusters get-credentials $CLUSTER_NAME
     - kubectl apply -f deployment.yaml
     - kubectl apply -f service.yaml
-    - kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    - kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:latest
