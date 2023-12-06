@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gh-trends-container
-          image: gcr.io/gh-trends/gh-trends:latest
+          image: registry.gitlab.com/ebenezerdon/gh-trends:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
