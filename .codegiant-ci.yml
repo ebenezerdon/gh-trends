@@ -1,38 +1,74 @@
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-deploy
+spec:
+  steps:
+    - name: build
+      image: 'docker:24.0.5'
+      env:
+        - name: DOCKER_HOST
+          value: 'tcp://localhost:2376'
+        - name: DOCKER_TLS_VERIFY
+          value: '1'
+        - name: DOCKER_CERT_PATH
+          value: /certs/client
+      script: >
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        docker build -t $CI_REGISTRY_IMAGE .
+        docker push $CI_REGISTRY_IMAGE
+      volumeMounts:
+        - mountPath: /certs/client
+          name: dind-certs
+  sidecars:
+    - image: 'docker:24.0.5-dind'
+      name: server
+      resources:
+        requests:
+          memory: 2Gi
+          cpu: 2000m
+        limits:
+          memory: 2Gi
+          cpu: 2000m
+      args:
+        - '--storage-driver=vfs'
+        - '--userland-proxy=false'
+        - '--debug'
+      securityContext:
+        privileged: true
+      env:
+        - name: DOCKER_TLS_CERTDIR
+          value: /certs
+      volumeMounts:
+        - mountPath: /certs/client
+          name: dind-certs
+      readinessProbe:
+        periodSeconds: 1
+        exec:
+          command:
+            - ls
+            - /certs/client/ca.pem
+  volumes:
+    - name: dind-certs
+      emptyDir: {}
 
-env:
-  CI_REGISTRY_USER: "dockerusername"
-  CI_REGISTRY_PASSWORD: "dockerpassowrd"
-  CI_REGISTRY: "path to registry"
-  CI_REGISTRY_IMAGE: "gh-trends"
+---
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: pipeline
+spec:
+  tasks:
+    - name: run-build-deploy
+      taskRef:
+        name: build-deploy
 
-jobs:
-  build-job:
-    name: Build Job
-    runs-on: docker:latest
-    steps:
-      - name: build
-        script: 
-          - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-          - docker build -t $CI_REGISTRY_IMAGE .
-          - docker push $CI_REGISTRY_IMAGE
-  deploy-job:
-    name: Deploy Job
-    runs-on: google/cloud-sdk:latest
-    steps:
-      - name: deploy
-        script:
-          - echo $SERVICE_ACCOUNT > /tmp/service_account.json
-          - gcloud auth activate-service-account --key-file /tmp/service_account.json
-          - gcloud config set project $PROJECT_ID
-          - gcloud config set compute/zone $COMPUTE_ZONE
-          - gcloud container clusters get-credentials $CLUSTER_NAME
-          - kubectl apply -f deployment.yaml
-          - kubectl apply -f service.yaml
-          - kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:latest
+---
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: pipeline-run
+spec:
+  pipelineRef:
+    name: pipeline
+
