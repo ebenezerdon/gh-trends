@@ -21,6 +21,18 @@ spec:
       volumeMounts:
         - mountPath: /certs/client
           name: dind-certs
+    - name: deploy
+      image: 'google/cloud-sdk:latest'
+      script: |
+        export SHORT_SHA=${SHA:0:7}
+        echo $SERVICE_ACCOUNT > /tmp/service_account.json
+        gcloud auth activate-service-account --key-file /tmp/service_account.json
+        gcloud config set project $PROJECT_ID
+        gcloud config set compute/zone $COMPUTE_ZONE
+        gcloud container clusters get-credentials $CLUSTER_NAME
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:$SHORT_SHA
   sidecars:
     - image: 'docker:24.0.5-dind'
       name: server
