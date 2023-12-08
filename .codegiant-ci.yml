@@ -16,7 +16,8 @@ spec:
       script: >
         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
         export SHORT_SHA=${SHA:0:7}
-        docker build -t $CI_REGISTRY_IMAGE:$SHORT_SHA .
+        docker build --help
+        docker build --tag $CI_REGISTRY_IMAGE:$SHORT_SHA .
         docker push $CI_REGISTRY_IMAGE:$SHORT_SHA
       volumeMounts:
         - mountPath: /certs/client
