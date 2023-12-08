@@ -25,6 +25,11 @@ spec:
       image: 'google/cloud-sdk:latest'
       script: |
         export SHORT_SHA=${SHA:0:7}
+        echo "SERVICE_ACCOUNT: $SERVICE_ACCOUNT"
+        echo "PROJECT_ID: $PROJECT_ID"
+        echo "COMPUTE_ZONE: $COMPUTE_ZONE"
+        echo "CLUSTER_NAME: $CLUSTER_NAME"
+        echo "DEPLOYMENT_NAME: $DEPLOYMENT_NAME"
         echo $SERVICE_ACCOUNT > /tmp/service_account.json
         gcloud auth activate-service-account --key-file /tmp/service_account.json
         gcloud config set project $PROJECT_ID
