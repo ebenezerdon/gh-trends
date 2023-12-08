@@ -6,6 +6,12 @@ on:
     branches:
       - main
 
+env:
+  CI_REGISTRY_USER: "dockerusername"
+  CI_REGISTRY_PASSWORD: "dockerpassowrd"
+  CI_REGISTRY: "path to registry"
+  CI_REGISTRY_IMAGE: "gh-trends"
+
 jobs:
   build_job:
     name: Build Job
@@ -22,8 +28,8 @@ jobs:
     steps:
       - name: deploy
         run:
-          - echo $SERVICE_ACCOUNT > /tmp/$CI_PIPELINE_ID.json
-          - gcloud auth activate-service-account --key-file /tmp/$CI_PIPELINE_ID.json
+          - echo $SERVICE_ACCOUNT > /tmp/service_account.json
+          - gcloud auth activate-service-account --key-file /tmp/service_account.json
           - gcloud config set project $PROJECT_ID
           - gcloud config set compute/zone $COMPUTE_ZONE
           - gcloud container clusters get-credentials $CLUSTER_NAME
