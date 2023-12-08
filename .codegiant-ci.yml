@@ -4,31 +4,36 @@ metadata:
   name: build-deploy
 spec:
   steps:
-    # - name: build
-    #   image: 'docker:24.0.5'
-    #   env:
-    #     - name: DOCKER_HOST
-    #       value: 'tcp://localhost:2376'
-    #     - name: DOCKER_TLS_VERIFY
-    #       value: '1'
-    #     - name: DOCKER_CERT_PATH
-    #       value: /certs/client
-    #   script: |
-    #     docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-    #     export SHORT_SHA=${SHA:0:7}
-    #     docker build -t $CI_REGISTRY_IMAGE:$SHORT_SHA .
-    #     docker push $CI_REGISTRY_IMAGE:$SHORT_SHA
-    #   volumeMounts:
-    #     - mountPath: /certs/client
-    #       name: dind-certs
+    - name: build
+      image: 'docker:24.0.5'
+      env:
+        - name: DOCKER_HOST
+          value: 'tcp://localhost:2376'
+        - name: DOCKER_TLS_VERIFY
+          value: '1'
+        - name: DOCKER_CERT_PATH
+          value: /certs/client
+      script: |
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+        export SHORT_SHA=${SHA:0:7}
+        docker build -t $CI_REGISTRY_IMAGE:$SHORT_SHA .
+        docker push $CI_REGISTRY_IMAGE:$SHORT_SHA
+      volumeMounts:
+        - mountPath: /certs/client
+          name: dind-certs
     - name: deploy
       image: 'google/cloud-sdk:latest'
       script: |
-        echo "SERVICE_ACCOUNT: $SERVICE_ACCOUNT"
-        echo "PROJECT_ID: $PROJECT_ID"
-        echo "COMPUTE_ZONE: $COMPUTE_ZONE"
-        echo "CLUSTER_NAME: $CLUSTER_NAME"
-        echo "DEPLOYMENT_NAME: $DEPLOYMENT_NAME"
+        #!/usr/bin/env bash
+        export SHORT_SHA=${SHA:0:7}
+        echo $SERVICE_ACCOUNT > /tmp/service_account.json
+        gcloud auth activate-service-account --key-file /tmp/service_account.json
+        gcloud config set project $PROJECT_ID
+        gcloud config set compute/zone $COMPUTE_ZONE
+        gcloud container clusters get-credentials $CLUSTER_NAME
+        kubectl apply -f deployment.yaml
+        kubectl apply -f service.yaml
+        kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:$SHORT_SHA
   sidecars:
     - image: 'docker:24.0.5-dind'
       name: server
