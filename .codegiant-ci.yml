@@ -24,7 +24,6 @@ spec:
     - name: deploy
       image: 'google/cloud-sdk:latest'
       script: |
-        export SHORT_SHA=${SHA:0:7}
         echo "SERVICE_ACCOUNT: $SERVICE_ACCOUNT"
         echo "PROJECT_ID: $PROJECT_ID"
         echo "COMPUTE_ZONE: $COMPUTE_ZONE"
