@@ -14,9 +14,10 @@ spec:
         - name: DOCKER_CERT_PATH
           value: /certs/client
       script: >
-        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-        docker build -t $CI_REGISTRY_IMAGE .
-        docker push $CI_REGISTRY_IMAGE
+        docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+        export SHORT_SHA=${SHA:0:7}
+        docker build -t $CI_REGISTRY_IMAGE:$(SHORT_SHA) .
+        docker push $CI_REGISTRY_IMAGE:$(SHORT_SHA)
       volumeMounts:
         - mountPath: /certs/client
           name: dind-certs
