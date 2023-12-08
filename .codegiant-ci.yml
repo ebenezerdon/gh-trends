@@ -13,7 +13,7 @@ env:
   CI_REGISTRY_IMAGE: "gh-trends"
 
 jobs:
-  build_job:
+  build-job:
     name: Build Job
     runs-on: docker:latest
     steps:
@@ -22,7 +22,7 @@ jobs:
           - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
           - docker build -t $CI_REGISTRY_IMAGE .
           - docker push $CI_REGISTRY_IMAGE
-  deploy_job:
+  deploy-job:
     name: Deploy Job
     runs-on: google/cloud-sdk:latest
     steps:
