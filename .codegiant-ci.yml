@@ -18,7 +18,7 @@ jobs:
     runs-on: docker:latest
     steps:
       - name: build
-        run: 
+        script: 
           - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
           - docker build -t $CI_REGISTRY_IMAGE .
           - docker push $CI_REGISTRY_IMAGE
@@ -27,7 +27,7 @@ jobs:
     runs-on: google/cloud-sdk:latest
     steps:
       - name: deploy
-        run:
+        script:
           - echo $SERVICE_ACCOUNT > /tmp/service_account.json
           - gcloud auth activate-service-account --key-file /tmp/service_account.json
           - gcloud config set project $PROJECT_ID
