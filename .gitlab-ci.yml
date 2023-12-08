@@ -2,7 +2,7 @@ stages:
   - build
   - deploy
 
-build_job:
+build-job:
   stage: build
   image: docker:latest
   services:
@@ -12,7 +12,7 @@ build_job:
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
-deploy_job:
+deploy-job:
   stage: deploy
   image: google/cloud-sdk:latest
   script:
