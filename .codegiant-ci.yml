@@ -29,7 +29,7 @@ spec:
         echo $SERVICE_ACCOUNT > /tmp/service_account.json
         gcloud auth activate-service-account --key-file /tmp/service_account.json
         gcloud config set project $PROJECT_ID
-        gcloud config set compute/zone $COMPUTE_ZONE
+        gcloud config set compute/region $COMPUTE_REGION
         gcloud container clusters get-credentials $CLUSTER_NAME
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
