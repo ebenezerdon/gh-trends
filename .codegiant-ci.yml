@@ -30,7 +30,9 @@ spec:
         gcloud auth activate-service-account --key-file /tmp/service_account.json
         gcloud config set project $PROJECT_ID
         gcloud config set compute/region $COMPUTE_REGION
-        gcloud container clusters get-credentials $CLUSTER_NAME
+        mkdir -p /workspace/.kube
+        export KUBECONFIG=/workspace/.kube/config
+        gcloud container clusters get-credentials $CLUSTER_NAME --region $COMPUTE_REGION
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
         kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:$SHORT_SHA
