@@ -26,7 +26,7 @@ spec:
       script: |
         #!/usr/bin/env bash
         export SHORT_SHA=${SHA:0:7}
-        echo $SERVICE_ACCOUNT > /tmp/service_account.json
+        echo $SERVICE_ACCOUNT > | base64 -d > /tmp/service_account.json
         gcloud auth activate-service-account --key-file /tmp/service_account.json
         gcloud config set project $PROJECT_ID
         gcloud config set compute/zone $COMPUTE_ZONE
