@@ -15,17 +15,14 @@ spec:
           value: /certs/client
       script: |
         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
-        export SHORT_SHA=${SHA:0:7}
-        docker build -t $CI_REGISTRY_IMAGE:$SHORT_SHA .
-        docker push $CI_REGISTRY_IMAGE:$SHORT_SHA
+        docker build -t $CI_REGISTRY_IMAGE:latest .
+        docker push $CI_REGISTRY_IMAGE:latest
       volumeMounts:
         - mountPath: /certs/client
           name: dind-certs
     - name: deploy
       image: 'google/cloud-sdk:latest'
       script: |
-        #!/usr/bin/env bash
-        export SHORT_SHA=${SHA:0:7}
         echo $SERVICE_ACCOUNT > /tmp/service_account.json
         gcloud auth activate-service-account --key-file /tmp/service_account.json
         gcloud config set project $PROJECT_ID
@@ -35,7 +32,7 @@ spec:
         gcloud container clusters get-credentials $CLUSTER_NAME --region $COMPUTE_REGION
         kubectl apply -f deployment.yaml
         kubectl apply -f service.yaml
-        kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:$SHORT_SHA
+        kubectl set image deployment/$DEPLOYMENT_NAME $CONTAINER_NAME=$CI_REGISTRY_IMAGE:latest
   sidecars:
     - image: 'docker:24.0.5-dind'
       name: server
